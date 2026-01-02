@@ -1,6 +1,7 @@
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,17 +12,18 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String expression = "";
-  String answer = "923484";
+  String answer = "";
+  String ans = "";
 
   final List<String> buttons = [
     "AC",
     "DEL",
     "%",
-    "/",
+    "÷",
     "7",
     "8",
     "9",
-    "x",
+    "×",
     "4",
     "5",
     '6',
@@ -36,22 +38,43 @@ class _HomeState extends State<Home> {
     "=",
   ];
 
-  void onButtonTap(String val) {
+  void onButtonTap(String val) async {
     if (val == "AC") {
       expression = "";
       answer = "";
     } else if (val == "DEL") {
+      answer = "";
       if (expression.isNotEmpty) {
         expression = expression.substring(0, expression.length - 1);
       }
     } else if (val == "ANS") {
-      expression += "A";
+      expression += ans;
     } else if (val == "=") {
-      answer = "Answer";
+      calclate();
     } else {
+      answer = "";
       if (expression.length > 44) return;
       expression += val;
     }
+    setState(() {});
+  }
+
+  void calclate() {
+    String temp = expression.replaceAll("×", "*").replaceAll("÷", "/");
+    ExpressionParser p = GrammarParser();
+    Expression exp = p.parse(temp);
+
+    var context = ContextModel();
+
+    var evaluator = RealEvaluator(context);
+    num eval = evaluator.evaluate(exp);
+
+    if (eval % 1 == 0) {
+      answer = eval.toInt().toString();
+    } else {
+      answer = eval.toString();
+    }
+    ans = answer;
     setState(() {});
   }
 
@@ -62,7 +85,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Expanded(
-            flex: 1,
+            flex: 3,
             child: SafeArea(
               child: Container(
                 padding: EdgeInsets.only(
@@ -76,12 +99,12 @@ class _HomeState extends State<Home> {
                   children: [
                     DisplayText(
                       isLeft: true,
-                      maxLines: 4,
+                      maxLines: 3,
                       displayText: expression,
                     ),
                     DisplayText(
                       isLeft: false,
-                      maxLines: 1,
+                      maxLines: 2,
                       displayText: answer,
                     ),
                   ],
@@ -120,6 +143,7 @@ class DisplayText extends StatelessWidget {
           fontWeight: FontWeight.w400,
           fontFamily: GoogleFonts.lato().fontFamily,
           letterSpacing: 2.5,
+          overflow: TextOverflow.fade,
         ),
       ),
     );
@@ -134,24 +158,24 @@ class Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 2,
+      flex: 5,
       child: Container(
-        padding: EdgeInsets.only(left: 8, right: 8, top: 30),
+        padding: EdgeInsets.only(left: 8, right: 8, top: 4),
         child: Center(
           child: GridView.builder(
             itemCount: buttons.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
             ),
+            physics: NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               final String label = buttons[index];
               Color btnColor = const Color(0xFF333333);
               if (label == "AC" || label == "DEL" || label == "%") {
                 btnColor = const Color(0xFF7E7E7E);
-              } else if (["/", "x", "-", "+", "="].contains(label)) {
+              } else if (["÷", "×", "-", "+", "="].contains(label)) {
                 btnColor = const Color(0xFFFF9F0A);
               }
-
               return MyButton(
                 onButtonTap: () => onButtonTap(label),
                 buttonColor: btnColor,
