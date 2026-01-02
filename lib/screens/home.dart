@@ -1,3 +1,4 @@
+import 'package:calculator/widgets/app_navigation_bar.dart';
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -84,36 +85,36 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.black,
       body: Column(
         children: [
-          Expanded(
-            flex: 3,
-            child: SafeArea(
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: 26,
-                  right: 26,
-                  top: 30,
-                  bottom: 0,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    DisplayText(
-                      isLeft: true,
-                      maxLines: 3,
-                      displayText: expression,
-                    ),
-                    DisplayText(
-                      isLeft: false,
-                      maxLines: 2,
-                      displayText: answer,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          Display(expression: expression, answer: answer),
+          // AppNavigationBar(),
           Buttons(buttons: buttons, onButtonTap: onButtonTap),
         ],
+      ),
+    );
+  }
+}
+
+class Display extends StatelessWidget {
+  const Display({super.key, required this.expression, required this.answer});
+
+  final String expression;
+  final String answer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 4,
+      child: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(left: 26, right: 26, top: 30, bottom: 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              DisplayText(isLeft: true, maxLines: 3, displayText: expression),
+              DisplayText(isLeft: false, maxLines: 2, displayText: answer),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -158,9 +159,9 @@ class Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 5,
+      flex: 7,
       child: Container(
-        padding: EdgeInsets.only(left: 8, right: 8, top: 4),
+        padding: EdgeInsets.only(left: 8, right: 8),
         child: Center(
           child: GridView.builder(
             itemCount: buttons.length,
