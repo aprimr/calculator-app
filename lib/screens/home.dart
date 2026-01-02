@@ -1,5 +1,6 @@
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -9,6 +10,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String expression = "";
+  String answer = "923484";
+
   final List<String> buttons = [
     "AC",
     "DEL",
@@ -32,24 +36,100 @@ class _HomeState extends State<Home> {
     "=",
   ];
 
+  void onButtonTap(String val) {
+    if (val == "AC") {
+      expression = "";
+      answer = "";
+    } else if (val == "DEL") {
+      if (expression.isNotEmpty) {
+        expression = expression.substring(0, expression.length - 1);
+      }
+    } else if (val == "ANS") {
+      expression += "A";
+    } else if (val == "=") {
+      answer = "Answer";
+    } else {
+      if (expression.length > 44) return;
+      expression += val;
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
         children: [
-          Expanded(flex: 1, child: Container()),
-          Buttons(buttons: buttons),
+          Expanded(
+            flex: 1,
+            child: SafeArea(
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: 26,
+                  right: 26,
+                  top: 30,
+                  bottom: 0,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DisplayText(
+                      isLeft: true,
+                      maxLines: 4,
+                      displayText: expression,
+                    ),
+                    DisplayText(
+                      isLeft: false,
+                      maxLines: 1,
+                      displayText: answer,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Buttons(buttons: buttons, onButtonTap: onButtonTap),
         ],
       ),
     );
   }
 }
 
-class Buttons extends StatelessWidget {
-  const Buttons({super.key, required this.buttons});
+class DisplayText extends StatelessWidget {
+  final String displayText;
+  final int maxLines;
+  final bool isLeft;
+  const DisplayText({
+    super.key,
+    required this.displayText,
+    this.maxLines = 1,
+    this.isLeft = true,
+  });
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: isLeft ? Alignment.centerLeft : Alignment.centerRight,
+      child: Text(
+        displayText,
+        maxLines: maxLines,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 40,
+          fontWeight: FontWeight.w400,
+          fontFamily: GoogleFonts.lato().fontFamily,
+          letterSpacing: 2.5,
+        ),
+      ),
+    );
+  }
+}
+
+class Buttons extends StatelessWidget {
   final List<String> buttons;
+  final Function(String) onButtonTap;
+  const Buttons({super.key, required this.buttons, required this.onButtonTap});
 
   @override
   Widget build(BuildContext context) {
@@ -64,21 +144,19 @@ class Buttons extends StatelessWidget {
               crossAxisCount: 4,
             ),
             itemBuilder: (BuildContext context, int index) {
+              final String label = buttons[index];
+              Color btnColor = const Color(0xFF333333);
+              if (label == "AC" || label == "DEL" || label == "%") {
+                btnColor = const Color(0xFF7E7E7E);
+              } else if (["/", "x", "-", "+", "="].contains(label)) {
+                btnColor = const Color(0xFFFF9F0A);
+              }
+
               return MyButton(
-                buttonColor:
-                    buttons[index] == "AC" ||
-                        buttons[index] == "DEL" ||
-                        buttons[index] == "%"
-                    ? Color(0xFF7E7E7E)
-                    : buttons[index] == "/" ||
-                          buttons[index] == "x" ||
-                          buttons[index] == "-" ||
-                          buttons[index] == "+" ||
-                          buttons[index] == "="
-                    ? Color(0xFFFF9F0A)
-                    : Color(0xFF333333),
+                onButtonTap: () => onButtonTap(label),
+                buttonColor: btnColor,
                 textColor: Colors.white,
-                buttonText: buttons[index],
+                buttonText: label,
               );
             },
           ),
