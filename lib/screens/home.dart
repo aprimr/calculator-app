@@ -1,3 +1,4 @@
+import 'package:calculator/widgets/app_navigation_bar.dart';
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,13 +54,57 @@ class _HomeState extends State<Home> {
       calclate();
     } else {
       answer = "";
-      if (expression.length > 44) return;
+      if (expression.length > 29) return;
+      if (expression.isNotEmpty &&
+          (expression.substring(expression.length - 1, expression.length) ==
+                  "%" ||
+              expression.substring(expression.length - 1, expression.length) ==
+                  "÷" ||
+              expression.substring(expression.length - 1, expression.length) ==
+                  "×" ||
+              expression.substring(expression.length - 1, expression.length) ==
+                  "-" ||
+              expression.substring(expression.length - 1, expression.length) ==
+                  "+" ||
+              expression.substring(expression.length - 1, expression.length) ==
+                  ".") &&
+          (val == "%" ||
+              val == "÷" ||
+              val == "×" ||
+              val == "-" ||
+              val == "+" ||
+              val == ".")) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Number Expected. Please enter a valid expression."),
+            action: SnackBarAction(label: "OK", onPressed: () {}),
+          ),
+        );
+        return;
+      }
       expression += val;
     }
     setState(() {});
   }
 
   void calclate() {
+    List<String> checkExpn = expression.split('');
+    if (checkExpn[0] == "%" ||
+        checkExpn[0] == "÷" ||
+        checkExpn[0] == "×" ||
+        checkExpn[0] == "-" ||
+        checkExpn[0] == "+" ||
+        checkExpn[0] == ".") {
+      return;
+    }
+    if (checkExpn[expression.length - 1] == "%" ||
+        checkExpn[expression.length - 1] == "÷" ||
+        checkExpn[expression.length - 1] == "×" ||
+        checkExpn[expression.length - 1] == "-" ||
+        checkExpn[expression.length - 1] == "+" ||
+        checkExpn[expression.length - 1] == ".") {
+      return;
+    }
     String temp = expression.replaceAll("×", "*").replaceAll("÷", "/");
     ExpressionParser p = GrammarParser();
     Expression exp = p.parse(temp);
@@ -85,7 +130,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Display(expression: expression, answer: answer),
-          // AppNavigationBar(),
+          AppNavigationBar(),
           Buttons(buttons: buttons, onButtonTap: onButtonTap),
         ],
       ),

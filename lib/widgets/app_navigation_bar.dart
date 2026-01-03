@@ -29,7 +29,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
   Widget navItem(int i, IconData icon) {
     return IconButton(
       onPressed: () => setState(() => index = i),
-      icon: Icon(icon, color: index == i ? Colors.blue : Colors.grey, size: 24),
+      icon: Icon(icon, color: index == i ? Colors.blue : Colors.grey, size: 28),
     );
   }
 }
