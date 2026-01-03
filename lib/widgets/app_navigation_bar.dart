@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class AppNavigationBar extends StatefulWidget {
-  const AppNavigationBar({super.key});
+  late int index;
+  AppNavigationBar({super.key, required this.index});
 
   @override
   State<AppNavigationBar> createState() => _AppNavigationBarState();
 }
 
 class _AppNavigationBarState extends State<AppNavigationBar> {
-  int index = 0;
+  List<String> navItems = ['/', "/length", "/currency", '/more'];
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +30,15 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
 
   Widget navItem(int i, IconData icon) {
     return IconButton(
-      onPressed: () => setState(() => index = i),
-      icon: Icon(icon, color: index == i ? Colors.blue : Colors.grey, size: 28),
+      onPressed: () => {
+        setState(() => widget.index = i),
+        Navigator.pushNamed(context, navItems[i]),
+      },
+      icon: Icon(
+        icon,
+        color: widget.index == i ? Colors.blue : Colors.grey,
+        size: 28,
+      ),
     );
   }
 }

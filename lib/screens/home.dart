@@ -74,12 +74,6 @@ class _HomeState extends State<Home> {
               val == "-" ||
               val == "+" ||
               val == ".")) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Number Expected. Please enter a valid expression."),
-            action: SnackBarAction(label: "OK", onPressed: () {}),
-          ),
-        );
         return;
       }
       expression += val;
@@ -130,7 +124,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Display(expression: expression, answer: answer),
-          AppNavigationBar(),
+          AppNavigationBar(index: 0),
           Buttons(buttons: buttons, onButtonTap: onButtonTap),
         ],
       ),
