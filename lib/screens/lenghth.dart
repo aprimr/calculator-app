@@ -1,6 +1,9 @@
 import 'package:calculator/widgets/app_navigation_bar.dart';
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+enum InputTarget { from, to }
 
 class Length extends StatefulWidget {
   const Length({super.key});
@@ -25,6 +28,47 @@ class _LengthState extends State<Length> {
     "⇆",
   ];
 
+  String selectedFromUnit = "m";
+  String selectedToUnit = "m";
+  double fromVal = 1;
+  double toVal = 1;
+  InputTarget currentOperating = InputTarget.from;
+  final List<String> lengthUnits = ["m", "cm", "mm", "km", "inch", "ft"];
+  final Map<String, double> lengthToMeter = {
+    "m": 1.0,
+    "cm": 0.01,
+    "mm": 0.001,
+    "km": 1000.0,
+    "in": 0.0254,
+    "ft": 0.3048,
+  };
+  final Map<String, String> unitToName = {
+    "m": "Meter",
+    "cm": "Centimeter",
+    "mm": "Milimeter",
+    "km": "Kilometer",
+    "in": "Inch",
+    "ft": "Feet",
+  };
+
+  void onFromUnitChanged(String unit) {
+    setState(() {
+      selectedFromUnit = unit;
+    });
+  }
+
+  void onToUnitChanged(String unit) {
+    setState(() {
+      selectedToUnit = unit;
+    });
+  }
+
+  dynamic onCurrentOperatingChanged(InputTarget inputTarget) {
+    setState(() {
+      currentOperating = inputTarget;
+    });
+  }
+
   void onButtonTap(String val) {}
 
   @override
@@ -33,10 +77,192 @@ class _LengthState extends State<Length> {
       backgroundColor: Colors.black,
       body: Column(
         children: [
-          Expanded(flex: 4, child: Container(color: Colors.blue)),
+          Display(
+            selectedFromUnit: selectedFromUnit,
+            selectedToUnit: selectedToUnit,
+            fromVal: fromVal,
+            toVal: toVal,
+            currentOperating: currentOperating,
+            lengthUnits: lengthUnits,
+            unitToName: unitToName,
+            onFromUnitChanged: onFromUnitChanged,
+            onToUnitChanged: onToUnitChanged,
+            onCurrentOperatingChanged: onCurrentOperatingChanged,
+          ),
           AppNavigationBar(index: 1),
           Buttons(buttons: numberButtons, onButtonTap: onButtonTap),
         ],
+      ),
+    );
+  }
+}
+
+class Display extends StatelessWidget {
+  final List<String> lengthUnits;
+  final Map<String, String> unitToName;
+  final InputTarget currentOperating;
+  final String selectedFromUnit;
+  final String selectedToUnit;
+  final double fromVal;
+  final double toVal;
+  final Function(String) onFromUnitChanged;
+  final Function(String) onToUnitChanged;
+  final Function(InputTarget) onCurrentOperatingChanged;
+
+  const Display({
+    super.key,
+    required this.lengthUnits,
+    required this.selectedFromUnit,
+    required this.selectedToUnit,
+    required this.fromVal,
+    required this.toVal,
+    required this.onFromUnitChanged,
+    required this.onToUnitChanged,
+    required this.unitToName,
+    required this.currentOperating,
+    required this.onCurrentOperatingChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 4,
+      child: SafeArea(
+        child: Container(
+          // color: Colors.blue,
+          padding: EdgeInsets.only(left: 36, right: 36, top: 50, bottom: 50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // From row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Unit Selector
+                  DropdownButton<String>(
+                    value: selectedFromUnit,
+                    dropdownColor: Color(0xFF313131),
+                    underline: Text(''),
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 24,
+                    ),
+                    items: lengthUnits
+                        .map(
+                          (unit) => DropdownMenuItem(
+                            value: unit,
+                            child: Text(
+                              unit,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (val) {
+                      if (val != null) onFromUnitChanged(val);
+                    },
+                  ),
+                  // Value
+                  GestureDetector(
+                    onTap: () {
+                      onCurrentOperatingChanged(InputTarget.from);
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          fromVal.toString(),
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: 28,
+                            color: currentOperating == InputTarget.from
+                                ? Color(0xFFFF9F0A)
+                                : Colors.white,
+                          ),
+                        ),
+                        Text(
+                          unitToName[selectedFromUnit]!,
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: 12,
+                            color: currentOperating == InputTarget.from
+                                ? Color(0xFFFF9F0A)
+                                : Color(0xFF909090),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              // To row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Unit Selector
+                  DropdownButton<String>(
+                    value: selectedToUnit,
+                    dropdownColor: Color(0xFF313131),
+                    underline: Text(''),
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 24,
+                    ),
+                    items: lengthUnits
+                        .map(
+                          (unit) => DropdownMenuItem(
+                            value: unit,
+                            child: Text(
+                              unit,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (val) {
+                      if (val != null) onToUnitChanged(val);
+                    },
+                  ),
+                  // Value
+                  GestureDetector(
+                    onTap: () {
+                      onCurrentOperatingChanged(InputTarget.to);
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          toVal.toString(),
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: 28,
+                            color: currentOperating == InputTarget.to
+                                ? Color(0xFFFF9F0A)
+                                : Colors.white,
+                          ),
+                        ),
+                        Text(
+                          unitToName[selectedToUnit]!,
+                          style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontSize: 12,
+                            color: currentOperating == InputTarget.to
+                                ? Color(0xFFFF9F0A)
+                                : Color(0xFF909090),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -69,8 +295,6 @@ class Buttons extends StatelessWidget {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
-                            mainAxisSpacing: 8,
-                            crossAxisSpacing: 8,
                           ),
                       itemBuilder: (context, index) {
                         final label = buttons[index];
