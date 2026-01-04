@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
     "=",
   ];
 
-  void onButtonTap(String val) async {
+  void onButtonTap(String val) {
     if (val == "AC") {
       expression = "";
       answer = "";
@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
       calclate();
     } else {
       answer = "";
-      if (expression.length > 29) return;
+      if (expression.length > 25) return;
       if (expression.isNotEmpty &&
           (expression.substring(expression.length - 1, expression.length) ==
                   "%" ||
@@ -148,7 +148,7 @@ class Display extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              DisplayText(isLeft: true, maxLines: 3, displayText: expression),
+              DisplayText(isLeft: true, maxLines: 2, displayText: expression),
               DisplayText(isLeft: false, maxLines: 2, displayText: answer),
             ],
           ),
