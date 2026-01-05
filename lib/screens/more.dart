@@ -23,7 +23,7 @@ class More extends StatelessWidget {
       "Calculator",
       "Length",
       "Currency",
-      "Area",
+      "Area", 
       "BMI",
       "Mass",
       "Speed",
@@ -56,27 +56,35 @@ class More extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             itemCount: 9,
             itemBuilder: (context, index) {
-              return Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    Center(
-                      child: HugeIcon(
-                        icon: icons[index],
-                        size: 30,
-                        color: Colors.white,
-                      ),
+              final item = items[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, itemRoutes[item]!);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Center(
+                          child: HugeIcon(
+                            icon: icons[index],
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          items[index],
+                          style: TextStyle(
+                            color: const Color(0xFF959595),
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 20),
-                    Text(
-                      items[index],
-                      style: TextStyle(
-                        color: const Color(0xFF959595),
-                        fontFamily: GoogleFonts.poppins().fontFamily,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               );
             },
