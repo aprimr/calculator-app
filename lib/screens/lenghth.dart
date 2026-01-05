@@ -30,10 +30,10 @@ class _LengthState extends State<Length> {
 
   String selectedFromUnit = "m";
   String selectedToUnit = "m";
-  double fromVal = 1;
-  double toVal = 1;
+  String fromVal = "12321";
+  String toVal = "1";
   InputTarget currentOperating = InputTarget.from;
-  final List<String> lengthUnits = ["m", "cm", "mm", "km", "inch", "ft"];
+  final List<String> lengthUnits = ["m", "cm", "mm", "km", "in", "ft"];
   final Map<String, double> lengthToMeter = {
     "m": 1.0,
     "cm": 0.01,
@@ -69,7 +69,48 @@ class _LengthState extends State<Length> {
     });
   }
 
-  void onButtonTap(String val) {}
+  void onButtonTap(String val) {
+    print(val);
+    if (currentOperating == InputTarget.from) {
+      if (val == "DEL") {
+        if (fromVal.length == 1) {
+          fromVal = "0";
+        } else {
+          fromVal = fromVal.substring(0, fromVal.length - 1);
+        }
+      } else if (val == "AC") {
+        fromVal = "0";
+      } else if (val == "=") {
+      } else if (val == "⇆") {
+      } else {
+        if (fromVal == "0") {
+          fromVal = val;
+        } else if (fromVal.length < 8) {
+          fromVal = fromVal + val;
+        }
+      }
+    }
+    if (currentOperating == InputTarget.to) {
+      if (val == "DEL") {
+        if (toVal.length == 1) {
+          toVal = "0";
+        } else {
+          toVal = toVal.substring(0, toVal.length - 1);
+        }
+      } else if (val == "AC") {
+        toVal = "0";
+      } else if (val == "=") {
+      } else if (val == "⇆") {
+      } else {
+        if (toVal == "0") {
+          toVal = val;
+        } else if (toVal.length < 8) {
+          toVal = toVal + val;
+        }
+      }
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,8 +144,8 @@ class Display extends StatelessWidget {
   final InputTarget currentOperating;
   final String selectedFromUnit;
   final String selectedToUnit;
-  final double fromVal;
-  final double toVal;
+  final String fromVal;
+  final String toVal;
   final Function(String) onFromUnitChanged;
   final Function(String) onToUnitChanged;
   final Function(InputTarget) onCurrentOperatingChanged;
