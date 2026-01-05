@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 // ignore: must_be_immutable
 class AppNavigationBar extends StatefulWidget {
@@ -15,29 +16,32 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 24, right: 24),
+      padding: EdgeInsets.only(left: 20, right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          navItem(0, Icons.calculate),
-          navItem(1, Icons.straighten),
-          navItem(2, Icons.currency_exchange),
-          navItem(3, Icons.apps_rounded),
+          navItem(0, HugeIcons.strokeRoundedCalculate),
+          navItem(1, HugeIcons.strokeRoundedCoordinate01),
+          navItem(2, HugeIcons.strokeRoundedExchange03),
+          navItem(3, HugeIcons.strokeRoundedMore01),
         ],
       ),
     );
   }
 
-  Widget navItem(int i, IconData icon) {
+  Widget navItem(int i, dynamic icon) {
     return IconButton(
       onPressed: () => {
         setState(() => widget.index = i),
         Navigator.pushNamed(context, navItems[i]),
       },
-      icon: Icon(
-        icon,
-        color: widget.index == i ? Colors.blue : Colors.grey,
-        size: 28,
+      icon: Center(
+        child: HugeIcon(
+          icon: icon,
+          color: widget.index == i ? Colors.blue : Colors.grey,
+          size: 26,
+          strokeWidth: i == 3 ? 3.5 : 1.5,
+        ),
       ),
     );
   }

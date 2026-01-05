@@ -28,8 +28,8 @@ class _LengthState extends State<Length> {
 
   String selectedFromUnit = "m";
   String selectedToUnit = "m";
-  String fromVal = "1";
-  String toVal = "1";
+  String fromVal = "0";
+  String toVal = "0";
   final List<String> lengthUnits = [
     "m",
     "km",
