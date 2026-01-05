@@ -3,8 +3,6 @@ import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-enum InputTarget { from, to }
-
 class Length extends StatefulWidget {
   const Length({super.key});
 
@@ -30,25 +28,40 @@ class _LengthState extends State<Length> {
 
   String selectedFromUnit = "m";
   String selectedToUnit = "m";
-  String fromVal = "12321";
+  String fromVal = "1";
   String toVal = "1";
-  InputTarget currentOperating = InputTarget.from;
-  final List<String> lengthUnits = ["m", "cm", "mm", "km", "in", "ft"];
+  final List<String> lengthUnits = [
+    "m",
+    "km",
+    "dm",
+    "cm",
+    "mm",
+    "mi",
+    "yd",
+    "ft",
+    "in",
+  ];
   final Map<String, double> lengthToMeter = {
     "m": 1.0,
+    "km": 1000.0,
+    "dm": 0.1,
     "cm": 0.01,
     "mm": 0.001,
-    "km": 1000.0,
-    "in": 0.0254,
+    "mi": 1609.344,
+    "yd": 0.9144,
     "ft": 0.3048,
+    "in": 0.0254,
   };
   final Map<String, String> unitToName = {
     "m": "Meter",
-    "cm": "Centimeter",
-    "mm": "Milimeter",
     "km": "Kilometer",
+    "dm": "Decimeter",
+    "cm": "Centimeter",
+    "mm": "Millimeter",
+    "mi": "Mile",
+    "yd": "Yard",
+    "ft": "Foot",
     "in": "Inch",
-    "ft": "Feet",
   };
 
   void onFromUnitChanged(String unit) {
@@ -63,50 +76,50 @@ class _LengthState extends State<Length> {
     });
   }
 
-  dynamic onCurrentOperatingChanged(InputTarget inputTarget) {
+  double convertLength(String value, String fromUnit, String toUnit) {
+    final double input = double.tryParse(value) ?? 0.0;
+
+    final double fromFactor = lengthToMeter[fromUnit]!;
+    final double toFactor = lengthToMeter[toUnit]!;
+
+    return double.parse((input * fromFactor / toFactor).toStringAsFixed(3));
+  }
+
+  void reverseUnits(String fromUnit, String toUnit) {
+    String temp;
     setState(() {
-      currentOperating = inputTarget;
+      temp = fromUnit;
+      selectedFromUnit = toUnit;
+      selectedToUnit = temp;
     });
+    calculate(fromVal, selectedFromUnit, selectedToUnit);
+  }
+
+  void calculate(String value, String fromUnit, String toUnit) {
+    double result = convertLength(value, fromUnit, toUnit);
+    toVal = result.toString();
+    setState(() {});
   }
 
   void onButtonTap(String val) {
-    print(val);
-    if (currentOperating == InputTarget.from) {
-      if (val == "DEL") {
-        if (fromVal.length == 1) {
-          fromVal = "0";
-        } else {
-          fromVal = fromVal.substring(0, fromVal.length - 1);
-        }
-      } else if (val == "AC") {
+    if (val == "DEL") {
+      if (fromVal.length == 1) {
         fromVal = "0";
-      } else if (val == "=") {
-      } else if (val == "⇆") {
       } else {
-        if (fromVal == "0") {
-          fromVal = val;
-        } else if (fromVal.length < 8) {
-          fromVal = fromVal + val;
-        }
+        fromVal = fromVal.substring(0, fromVal.length - 1);
       }
-    }
-    if (currentOperating == InputTarget.to) {
-      if (val == "DEL") {
-        if (toVal.length == 1) {
-          toVal = "0";
-        } else {
-          toVal = toVal.substring(0, toVal.length - 1);
-        }
-      } else if (val == "AC") {
-        toVal = "0";
-      } else if (val == "=") {
-      } else if (val == "⇆") {
-      } else {
-        if (toVal == "0") {
-          toVal = val;
-        } else if (toVal.length < 8) {
-          toVal = toVal + val;
-        }
+    } else if (val == "AC") {
+      fromVal = "0";
+      toVal = "0";
+    } else if (val == "=") {
+      calculate(fromVal, selectedFromUnit, selectedToUnit);
+    } else if (val == "⇆") {
+      reverseUnits(selectedFromUnit, selectedToUnit);
+    } else {
+      if (fromVal == "0") {
+        fromVal = val;
+      } else if (fromVal.length < 8) {
+        fromVal = fromVal + val;
       }
     }
     setState(() {});
@@ -123,12 +136,10 @@ class _LengthState extends State<Length> {
             selectedToUnit: selectedToUnit,
             fromVal: fromVal,
             toVal: toVal,
-            currentOperating: currentOperating,
             lengthUnits: lengthUnits,
             unitToName: unitToName,
             onFromUnitChanged: onFromUnitChanged,
             onToUnitChanged: onToUnitChanged,
-            onCurrentOperatingChanged: onCurrentOperatingChanged,
           ),
           AppNavigationBar(index: 1),
           Buttons(buttons: numberButtons, onButtonTap: onButtonTap),
@@ -141,14 +152,12 @@ class _LengthState extends State<Length> {
 class Display extends StatelessWidget {
   final List<String> lengthUnits;
   final Map<String, String> unitToName;
-  final InputTarget currentOperating;
   final String selectedFromUnit;
   final String selectedToUnit;
   final String fromVal;
   final String toVal;
   final Function(String) onFromUnitChanged;
   final Function(String) onToUnitChanged;
-  final Function(InputTarget) onCurrentOperatingChanged;
 
   const Display({
     super.key,
@@ -160,8 +169,6 @@ class Display extends StatelessWidget {
     required this.onFromUnitChanged,
     required this.onToUnitChanged,
     required this.unitToName,
-    required this.currentOperating,
-    required this.onCurrentOperatingChanged,
   });
 
   @override
@@ -205,36 +212,27 @@ class Display extends StatelessWidget {
                     },
                   ),
                   // Value
-                  GestureDetector(
-                    onTap: () {
-                      onCurrentOperatingChanged(InputTarget.from);
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          fromVal.toString(),
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontSize: 28,
-                            color: currentOperating == InputTarget.from
-                                ? Color(0xFFFF9F0A)
-                                : Colors.white,
-                          ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        fromVal.toString(),
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          fontSize: 28,
+                          color: Color(0xFFFF9F0A),
                         ),
-                        Text(
-                          unitToName[selectedFromUnit]!,
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontSize: 12,
-                            color: currentOperating == InputTarget.from
-                                ? Color(0xFFFF9F0A)
-                                : Color(0xFF909090),
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                      Text(
+                        unitToName[selectedFromUnit]!,
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          fontSize: 12,
+                          color: Color(0xFFFF9F0A),
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -268,36 +266,27 @@ class Display extends StatelessWidget {
                     },
                   ),
                   // Value
-                  GestureDetector(
-                    onTap: () {
-                      onCurrentOperatingChanged(InputTarget.to);
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          toVal.toString(),
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontSize: 28,
-                            color: currentOperating == InputTarget.to
-                                ? Color(0xFFFF9F0A)
-                                : Colors.white,
-                          ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        toVal.toString(),
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          fontSize: 28,
+                          color: Colors.white,
                         ),
-                        Text(
-                          unitToName[selectedToUnit]!,
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            fontSize: 12,
-                            color: currentOperating == InputTarget.to
-                                ? Color(0xFFFF9F0A)
-                                : Color(0xFF909090),
-                            fontWeight: FontWeight.bold,
-                          ),
+                      ),
+                      Text(
+                        unitToName[selectedToUnit]!,
+                        style: TextStyle(
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                          fontSize: 12,
+                          color: Color(0xFF909090),
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
