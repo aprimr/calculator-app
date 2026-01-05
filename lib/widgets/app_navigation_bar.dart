@@ -21,9 +21,21 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           navItem(0, HugeIcons.strokeRoundedCalculate),
-          navItem(1, HugeIcons.strokeRoundedCoordinate01),
+          navItem(1, HugeIcons.strokeRoundedRuler),
           navItem(2, HugeIcons.strokeRoundedExchange03),
-          navItem(3, HugeIcons.strokeRoundedMore01),
+
+          // more
+          IconButton(
+            onPressed: () => {Navigator.pushNamed(context, "/more")},
+            icon: Center(
+              child: HugeIcon(
+                icon: HugeIcons.strokeRoundedMenuSquare,
+                color: Colors.grey,
+                size: 22,
+                strokeWidth: 1.5,
+              ),
+            ),
+          ),
         ],
       ),
     );
