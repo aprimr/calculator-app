@@ -130,7 +130,7 @@ class _TemperatureState extends State<Temperature> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(title: Text('Area')),
+      appBar: AppBar(title: Text('Temperature')),
       body: Column(
         children: [
           Display(
