@@ -37,7 +37,7 @@ class More extends StatelessWidget {
       "Area": "/area",
       "BMI": "/",
       "Mass": "/mass",
-      "Speed": "/",
+      "Speed": "/speed",
       "Temperature": "/temperature",
       "Time": "/",
     };
