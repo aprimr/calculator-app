@@ -195,7 +195,7 @@ class _CurrencyState extends State<Currency> {
     });
   }
 
-  double convertLength(String value, String fromUnit, String toUnit) {
+  double convert(String value, String fromUnit, String toUnit) {
     final double input = double.tryParse(value) ?? 0.0;
 
     final double fromFactor = currencyToUSD[fromUnit]!;
@@ -215,7 +215,7 @@ class _CurrencyState extends State<Currency> {
   }
 
   void calculate(String value, String fromUnit, String toUnit) {
-    double result = convertLength(value, fromUnit, toUnit);
+    double result = convert(value, fromUnit, toUnit);
     toVal = result.toString();
     setState(() {});
   }
