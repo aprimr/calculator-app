@@ -34,7 +34,7 @@ class More extends StatelessWidget {
       "Calculator": "/",
       "Length": "/length",
       "Currency": "/currency",
-      "Area": "/",
+      "Area": "/area",
       "BMI": "/",
       "Mass": "/",
       "Speed": "/",

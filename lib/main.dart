@@ -1,3 +1,4 @@
+import 'package:calculator/screens/area.dart';
 import 'package:calculator/screens/currency.dart';
 import 'package:calculator/screens/home.dart';
 import 'package:calculator/screens/lenghth.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         "/length": (context) => Length(),
         "/currency": (context) => Currency(),
         "/more": (context) => More(),
+        "/area": (context) => Area(),
       },
     );
   }
