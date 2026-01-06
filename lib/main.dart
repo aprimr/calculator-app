@@ -2,6 +2,7 @@ import 'package:calculator/screens/area.dart';
 import 'package:calculator/screens/currency.dart';
 import 'package:calculator/screens/home.dart';
 import 'package:calculator/screens/lenghth.dart';
+import 'package:calculator/screens/mass.dart';
 import 'package:calculator/screens/more.dart';
 import 'package:calculator/screens/temperature.dart';
 import 'package:calculator/utils/theme.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         "/more": (context) => More(),
         "/area": (context) => Area(),
         "/temperature": (context) => Temperature(),
+        "/mass": (context) => Mass(),
       },
     );
   }

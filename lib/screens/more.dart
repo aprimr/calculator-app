@@ -36,7 +36,7 @@ class More extends StatelessWidget {
       "Currency": "/currency",
       "Area": "/area",
       "BMI": "/",
-      "Mass": "/",
+      "Mass": "/mass",
       "Speed": "/",
       "Temperature": "/temperature",
       "Time": "/",
