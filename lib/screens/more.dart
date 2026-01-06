@@ -38,7 +38,7 @@ class More extends StatelessWidget {
       "BMI": "/",
       "Mass": "/",
       "Speed": "/",
-      "Temperature": "/",
+      "Temperature": "/temperature",
       "Time": "/",
     };
     return Scaffold(

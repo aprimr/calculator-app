@@ -3,6 +3,7 @@ import 'package:calculator/screens/currency.dart';
 import 'package:calculator/screens/home.dart';
 import 'package:calculator/screens/lenghth.dart';
 import 'package:calculator/screens/more.dart';
+import 'package:calculator/screens/temperature.dart';
 import 'package:calculator/utils/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         "/currency": (context) => Currency(),
         "/more": (context) => More(),
         "/area": (context) => Area(),
+        "/temperature": (context) => Temperature(),
       },
     );
   }
