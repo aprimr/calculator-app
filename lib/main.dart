@@ -6,6 +6,7 @@ import 'package:calculator/screens/mass.dart';
 import 'package:calculator/screens/more.dart';
 import 'package:calculator/screens/speed.dart';
 import 'package:calculator/screens/temperature.dart';
+import 'package:calculator/screens/time.dart';
 import 'package:calculator/utils/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         "/temperature": (context) => Temperature(),
         "/mass": (context) => Mass(),
         "/speed": (context) => Speed(),
+        "/time": (context) => Time(),
       },
     );
   }

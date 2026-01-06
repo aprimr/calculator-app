@@ -39,7 +39,7 @@ class More extends StatelessWidget {
       "Mass": "/mass",
       "Speed": "/speed",
       "Temperature": "/temperature",
-      "Time": "/",
+      "Time": "/time",
     };
     return Scaffold(
       backgroundColor: Colors.black,

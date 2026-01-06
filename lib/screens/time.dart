@@ -2,14 +2,14 @@ import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Speed extends StatefulWidget {
-  const Speed({super.key});
+class Time extends StatefulWidget {
+  const Time({super.key});
 
   @override
-  State<Speed> createState() => _SpeedState();
+  State<Time> createState() => _TimeState();
 }
 
-class _SpeedState extends State<Speed> {
+class _TimeState extends State<Time> {
   final List<String> numberButtons = [
     "7",
     "8",
@@ -25,27 +25,27 @@ class _SpeedState extends State<Speed> {
     "⇆",
   ];
 
-  String selectedFromUnit = "m/s";
-  String selectedToUnit = "m/s";
+  String selectedFromUnit = "s";
+  String selectedToUnit = "s";
   String fromVal = "0";
   String toVal = "0";
 
-  final List<String> speedUnits = ["m/s", "km/h", "mph", "ft/s", "knot"];
+  final List<String> timeUnits = ["s", "min", "h", "day", "week"];
 
-  final Map<String, double> speedToMeterPerSecond = {
-    "m/s": 1.0,
-    "km/h": 0.27777778,
-    "mph": 0.44704,
-    "ft/s": 0.3048,
-    "knot": 0.514444,
+  final Map<String, double> timeToSecond = {
+    "s": 1.0,
+    "min": 60.0,
+    "h": 3600.0,
+    "day": 86400.0,
+    "week": 604800.0,
   };
 
   final Map<String, String> unitToName = {
-    "m/s": "Meter per Second",
-    "km/h": "Kilometer per Hour",
-    "mph": "Miles per Hour",
-    "ft/s": "Feet per Second",
-    "knot": "Knot",
+    "s": "Second",
+    "min": "Minute",
+    "h": "Hour",
+    "day": "Day",
+    "week": "Week",
   };
 
   void onFromUnitChanged(String unit) {
@@ -63,8 +63,8 @@ class _SpeedState extends State<Speed> {
   double convert(String value, String fromUnit, String toUnit) {
     final double input = double.tryParse(value) ?? 0.0;
 
-    final double fromFactor = speedToMeterPerSecond[fromUnit]!;
-    final double toFactor = speedToMeterPerSecond[toUnit]!;
+    final double fromFactor = timeToSecond[fromUnit]!;
+    final double toFactor = timeToSecond[toUnit]!;
 
     return double.parse((input * fromFactor / toFactor).toStringAsFixed(3));
   }
@@ -113,7 +113,7 @@ class _SpeedState extends State<Speed> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(title: Text('Speed')),
+      appBar: AppBar(title: Text('Time')),
       body: Column(
         children: [
           Display(
@@ -121,7 +121,7 @@ class _SpeedState extends State<Speed> {
             selectedToUnit: selectedToUnit,
             fromVal: fromVal,
             toVal: toVal,
-            speedUnits: speedUnits,
+            timeUnits: timeUnits,
             unitToName: unitToName,
             onFromUnitChanged: onFromUnitChanged,
             onToUnitChanged: onToUnitChanged,
@@ -134,7 +134,7 @@ class _SpeedState extends State<Speed> {
 }
 
 class Display extends StatelessWidget {
-  final List<String> speedUnits;
+  final List<String> timeUnits;
   final Map<String, String> unitToName;
   final String selectedFromUnit;
   final String selectedToUnit;
@@ -145,7 +145,7 @@ class Display extends StatelessWidget {
 
   const Display({
     super.key,
-    required this.speedUnits,
+    required this.timeUnits,
     required this.selectedFromUnit,
     required this.selectedToUnit,
     required this.fromVal,
@@ -180,7 +180,7 @@ class Display extends StatelessWidget {
                       fontFamily: GoogleFonts.poppins().fontFamily,
                       fontSize: 24,
                     ),
-                    items: speedUnits
+                    items: timeUnits
                         .map(
                           (unit) => DropdownMenuItem(
                             value: unit,
@@ -234,7 +234,7 @@ class Display extends StatelessWidget {
                       fontFamily: GoogleFonts.poppins().fontFamily,
                       fontSize: 24,
                     ),
-                    items: speedUnits
+                    items: timeUnits
                         .map(
                           (unit) => DropdownMenuItem(
                             value: unit,
