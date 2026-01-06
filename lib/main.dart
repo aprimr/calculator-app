@@ -1,4 +1,5 @@
 import 'package:calculator/screens/area.dart';
+import 'package:calculator/screens/bmi.dart';
 import 'package:calculator/screens/currency.dart';
 import 'package:calculator/screens/home.dart';
 import 'package:calculator/screens/lenghth.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         "/currency": (context) => Currency(),
         "/more": (context) => More(),
         "/area": (context) => Area(),
+        "/bmi": (context) => Bmi(),
         "/temperature": (context) => Temperature(),
         "/mass": (context) => Mass(),
         "/speed": (context) => Speed(),
