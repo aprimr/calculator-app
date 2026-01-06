@@ -23,7 +23,7 @@ class More extends StatelessWidget {
       "Calculator",
       "Length",
       "Currency",
-      "Area", 
+      "Area",
       "BMI",
       "Mass",
       "Speed",
@@ -32,8 +32,8 @@ class More extends StatelessWidget {
     ];
     final Map<String, String> itemRoutes = {
       "Calculator": "/",
-      "Length": "/",
-      "Currency": "/",
+      "Length": "/length",
+      "Currency": "/currency",
       "Area": "/",
       "BMI": "/",
       "Mass": "/",
@@ -51,7 +51,7 @@ class More extends StatelessWidget {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               mainAxisSpacing: 38,
-              crossAxisSpacing: 16,
+              crossAxisSpacing: 20,
             ),
             physics: NeverScrollableScrollPhysics(),
             itemCount: 9,
@@ -63,21 +63,27 @@ class More extends StatelessWidget {
                 },
                 child: Container(
                   padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF111111),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                   child: Center(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Center(
                           child: HugeIcon(
                             icon: icons[index],
-                            size: 30,
+                            size: 34,
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 14),
                         Text(
                           items[index],
                           style: TextStyle(
-                            color: const Color(0xFF959595),
+                            color: const Color(0xFFA5A5A5),
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             fontWeight: FontWeight.w600,
                           ),
