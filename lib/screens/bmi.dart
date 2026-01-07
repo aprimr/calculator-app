@@ -1,3 +1,4 @@
+import 'package:calculator/widgets/bmi_gauge.dart';
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,7 +46,8 @@ class _BmiState extends State<Bmi> {
     if (hCm <= 0 || wKg <= 0) bmiRes = '0';
 
     final double hMeter = hCm / 100;
-    bmiRes = (wKg / (hMeter * hMeter)).toStringAsFixed(1);
+    final String res = (wKg / (hMeter * hMeter)).toStringAsFixed(1);
+    bmiRes = res == "NaN" ? "0" : res;
   }
 
   void onButtonTap(String val) {
@@ -53,6 +55,7 @@ class _BmiState extends State<Bmi> {
       height = "0";
       weight = "0";
       age = "0";
+      bmiRes = "0";
     } else if (val == "=") {
       calculateBMI(height, weight);
     } else if (selectedInput == InputTarget.height) {
@@ -281,7 +284,7 @@ class Display extends StatelessWidget {
                 ],
               ),
 
-              Text(bmiRes, style: TextStyle(color: Colors.white)),
+              BMIGauge(bmi: double.parse(bmiRes)),
             ],
           ),
         ),
