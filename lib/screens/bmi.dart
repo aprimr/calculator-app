@@ -284,7 +284,7 @@ class Display extends StatelessWidget {
                 ],
               ),
 
-              BMIGauge(bmi: double.parse(bmiRes)),
+              BMIGauge(bmi: double.parse(bmiRes), age: int.parse(age)),
             ],
           ),
         ),
