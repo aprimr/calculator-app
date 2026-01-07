@@ -45,6 +45,64 @@ class _BmiState extends State<Bmi> {
   }
 
   void onButtonTap(String val) {
+    if (val == "AC") {
+      height = "0";
+      weight = "0";
+      age = "0";
+    } else if (val == "=") {
+      // calculate
+    } else if (selectedInput == InputTarget.height) {
+      if (val == "DEL") {
+        if (height.length <= 1) {
+          height = "0";
+        } else {
+          height = height.substring(0, height.length - 1);
+        }
+        setState(() {});
+        return;
+      }
+      if (height.length >= 5) return;
+      if (val == "." && height.contains(".")) return;
+      if (height == "0") {
+        height = val == "." ? "0." : val;
+      } else {
+        height = height + val;
+      }
+    } else if (selectedInput == InputTarget.width) {
+      if (val == "DEL") {
+        if (weight.length <= 1) {
+          weight = "0";
+        } else {
+          weight = weight.substring(0, weight.length - 1);
+        }
+        setState(() {});
+        return;
+      }
+      if (weight.length >= 5) return;
+      if (val == "." && weight.contains(".")) return;
+      if (weight == "0") {
+        weight = val == "." ? "0." : val;
+      } else {
+        weight = weight + val;
+      }
+    } else if (selectedInput == InputTarget.age) {
+      if (val == "DEL") {
+        if (age.length <= 1) {
+          age = "0";
+        } else {
+          age = age.substring(0, age.length - 1);
+        }
+        setState(() {});
+        return;
+      }
+      if (age.length >= 5) return;
+      if (val == "." && age.contains(".")) return;
+      if (age == "0") {
+        age = val == "." ? "0." : val;
+      } else {
+        age = age + val;
+      }
+    }
     setState(() {});
   }
 
@@ -56,6 +114,9 @@ class _BmiState extends State<Bmi> {
       body: Column(
         children: [
           Display(
+            height: height,
+            weight: weight,
+            age: age,
             isMale: isMale,
             setGender: setGender,
             selectedInput: selectedInput,
@@ -69,12 +130,18 @@ class _BmiState extends State<Bmi> {
 }
 
 class Display extends StatelessWidget {
+  final String height;
+  final String weight;
+  final String age;
   final bool isMale;
   final void Function(bool) setGender;
   final void Function(InputTarget) setInputTarget;
   final InputTarget selectedInput;
   const Display({
     super.key,
+    required this.height,
+    required this.weight,
+    required this.age,
     required this.isMale,
     required this.setGender,
     required this.selectedInput,
@@ -97,8 +164,9 @@ class Display extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => setInputTarget(InputTarget.height),
-                    child: SizedBox(
+                    child: Container(
                       width: 150,
+                      color: Colors.black,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -115,7 +183,7 @@ class Display extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            "123",
+                            height,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
@@ -132,13 +200,14 @@ class Display extends StatelessWidget {
 
                   GestureDetector(
                     onTap: () => setInputTarget(InputTarget.width),
-                    child: SizedBox(
+                    child: Container(
                       width: 150,
+                      color: Colors.black,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Width (kg)",
+                            "Weight (kg)",
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -150,7 +219,7 @@ class Display extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            "123",
+                            weight,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
@@ -175,8 +244,9 @@ class Display extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => setInputTarget(InputTarget.age),
-                    child: SizedBox(
+                    child: Container(
                       width: 150,
+                      color: Colors.black,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -193,7 +263,7 @@ class Display extends StatelessWidget {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            "123",
+                            age,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
