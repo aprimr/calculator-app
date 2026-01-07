@@ -1,16 +1,44 @@
-# calculator
+# Calculator & Unit Converter App
 
-A new Flutter project.
+An all-in-one **Calculator & Unit Converter App** built with **Flutter**, designed to handle everyday calculations with speed, accuracy, and simplicity.  
+The app combines a **standard calculator**, multiple **unit converters**, and a **BMI calculator** in a single, clean, and user-friendly interface.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📥 Download
 
-A few resources to get you started if this is your first Flutter project:
+<p align="left">
+  <a href="https://devsrepo.netlify.app/a/OMuast4UF6btBc3kjRxZ" target="_blank">
+    <button style="background-color:#4CAF50; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; font-size:16px;">
+      Download Android APK
+    </button>
+  </a>
+</p>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📱 Features
+
+### Calculator
+- Fast and accurate standard calculator
+- Handles basic arithmetic operations smoothly
+
+### Unit Converters
+Convert real-world values quickly and easily:
+- **Length**
+- **Currency**
+- **Area**
+- **Mass**
+- **Speed**
+- **Temperature**
+- **Time**
+
+### BMI Calculator
+- Calculate Body Mass Index using height and weight
+- Instant and easy-to-understand results
+
+### UI & Experience
+- Clean and modern design
+- Grid-style home screen with intuitive icons
+- Smooth navigation and lightweight performance
+
