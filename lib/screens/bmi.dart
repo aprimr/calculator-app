@@ -1,7 +1,6 @@
 import 'package:calculator/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 enum InputTarget { height, width, age }
 
@@ -31,7 +30,7 @@ class _BmiState extends State<Bmi> {
   String height = "0";
   String weight = "0";
   String age = "0";
-  bool isMale = true;
+  String bmiRes = "0";
   InputTarget selectedInput = InputTarget.height;
 
   void setInputTarget(InputTarget val) {
@@ -39,9 +38,14 @@ class _BmiState extends State<Bmi> {
     setState(() {});
   }
 
-  void setGender(bool value) {
-    isMale = value;
-    setState(() {});
+  void calculateBMI(String height, String weight) {
+    final double hCm = double.tryParse(height) ?? 0;
+    final double wKg = double.tryParse(weight) ?? 0;
+
+    if (hCm <= 0 || wKg <= 0) bmiRes = '0';
+
+    final double hMeter = hCm / 100;
+    bmiRes = (wKg / (hMeter * hMeter)).toStringAsFixed(1);
   }
 
   void onButtonTap(String val) {
@@ -50,7 +54,7 @@ class _BmiState extends State<Bmi> {
       weight = "0";
       age = "0";
     } else if (val == "=") {
-      // calculate
+      calculateBMI(height, weight);
     } else if (selectedInput == InputTarget.height) {
       if (val == "DEL") {
         if (height.length <= 1) {
@@ -95,10 +99,10 @@ class _BmiState extends State<Bmi> {
         setState(() {});
         return;
       }
-      if (age.length >= 5) return;
-      if (val == "." && age.contains(".")) return;
+      if (age.length >= 2) return;
+      if (val == ".") return;
       if (age == "0") {
-        age = val == "." ? "0." : val;
+        age = val;
       } else {
         age = age + val;
       }
@@ -110,17 +114,16 @@ class _BmiState extends State<Bmi> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(title: Text('BMI')),
+      appBar: AppBar(title: Text('BMI Caclulator')),
       body: Column(
         children: [
           Display(
             height: height,
             weight: weight,
             age: age,
-            isMale: isMale,
-            setGender: setGender,
             selectedInput: selectedInput,
             setInputTarget: setInputTarget,
+            bmiRes: bmiRes,
           ),
           Buttons(buttons: numberButtons, onButtonTap: onButtonTap),
         ],
@@ -133,19 +136,17 @@ class Display extends StatelessWidget {
   final String height;
   final String weight;
   final String age;
-  final bool isMale;
-  final void Function(bool) setGender;
   final void Function(InputTarget) setInputTarget;
   final InputTarget selectedInput;
+  final String bmiRes;
   const Display({
     super.key,
     required this.height,
     required this.weight,
     required this.age,
-    required this.isMale,
-    required this.setGender,
     required this.selectedInput,
     required this.setInputTarget,
+    required this.bmiRes,
   });
 
   @override
@@ -277,79 +278,10 @@ class Display extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 150,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Gender",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: GoogleFonts.poppins().fontFamily,
-                            color: const Color(0xFFB4B4B4),
-                          ),
-                        ),
-                        SizedBox(height: 2),
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setGender(!isMale);
-                              },
-                              icon: Column(
-                                children: [
-                                  HugeIcon(
-                                    icon: HugeIcons.strokeRoundedMaleSymbol,
-                                    size: 24,
-                                    strokeWidth: 2,
-                                    color: isMale
-                                        ? Colors.amber
-                                        : Colors.blueAccent,
-                                  ),
-                                  HugeIcon(
-                                    icon: HugeIcons.strokeRoundedTick02,
-                                    size: 10,
-                                    strokeWidth: 2,
-                                    color: isMale ? Colors.white : Colors.black,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                            IconButton(
-                              onPressed: () {
-                                setGender(!isMale);
-                              },
-                              icon: Column(
-                                children: [
-                                  HugeIcon(
-                                    icon: HugeIcons.strokeRoundedFemaleSymbol,
-                                    size: 24,
-                                    strokeWidth: 2,
-                                    color: !isMale
-                                        ? Colors.amber
-                                        : Colors.purpleAccent,
-                                  ),
-                                  HugeIcon(
-                                    icon: HugeIcons.strokeRoundedTick02,
-                                    size: 10,
-                                    strokeWidth: 2,
-                                    color: !isMale
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
+
+              Text(bmiRes, style: TextStyle(color: Colors.white)),
             ],
           ),
         ),
